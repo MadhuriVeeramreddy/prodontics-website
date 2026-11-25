@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# prodontics.in — website
 
-## Getting Started
+Rebuild of the Prodontics Dental Specialities site (originally on Framer) as a static
+Next.js + React site. It builds to plain HTML/CSS/JS in `out/`, so it can be hosted free.
 
-First, run the development server:
+## Run locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000 while editing
+npm run build      # writes the static site to ./out
+npm run preview    # serves ./out at http://localhost:4321
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things live
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| What | File |
+|---|---|
+| Phone, email, WhatsApp, Instagram/Facebook links, map, Google Analytics ID | `src/lib/site.ts` |
+| Services list, team, testimonials, home FAQ | `src/lib/site.ts` |
+| Treatment pages (root canal, implants, braces…) text & images | `src/content/services.json` |
+| Blog posts (add a new one by appending an entry) | `src/content/blog.json` |
+| Page layouts | `src/app/**/page.tsx` |
+| Shared sections (header, footer, booking form, FAQ…) | `src/components/` |
+| Images / fonts | `public/images`, `public/fonts` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Contact form
 
-## Learn More
+Submissions are emailed through [Web3Forms](https://web3forms.com) (free, 250/month).
+Create an access key with the clinic email and set `NEXT_PUBLIC_WEB3FORMS_KEY`
+(locally in `.env.local`, and in the hosting dashboard's environment variables).
+Without a key the form opens the visitor's email app addressed to the clinic.
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy (free) — Cloudflare Pages
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Push this folder to a GitHub repository.
+2. Cloudflare dashboard → Workers & Pages → Create → Pages → Connect to Git → pick the repo.
+3. Build settings: framework preset **Next.js (Static HTML Export)**, build command `npm run build`,
+   output directory `out`, root directory `web` (if the repo contains this folder), env var
+   `NEXT_PUBLIC_WEB3FORMS_KEY`.
+4. Custom domains → add `prodontics.in` and `www.prodontics.in`. Cloudflare shows the exact DNS
+   records to create.
+5. In GoDaddy → DNS for prodontics.in: delete the Framer records
+   (`A @ 31.43.160.6`, `A @ 31.43.161.6`, `CNAME www sites.framer.app`) and add the records Cloudflare
+   showed. HTTPS is issued automatically once DNS propagates (minutes to a few hours).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Every push to `main` redeploys automatically.
 
-## Deploy on Vercel
+## Tools (used to match the Framer original)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`tools/capture.mjs` (screenshots at 4 breakpoints), `tools/spec.mjs` (layout dump),
+`tools/posdiff.py` (compare two dumps), `tools/smoke.mjs` (click-through checks).
