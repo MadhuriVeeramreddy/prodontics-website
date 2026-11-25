@@ -6,7 +6,6 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
     "preview": "serve out -l 4321",
     "capture": "node tools/capture.mjs"
   },
@@ -17,13 +16,10 @@
     "react-dom": "19.1.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.5.29",
     "playwright": "^1.62.1",
     "serve": "^14.2.8",
     "tailwindcss": "^4",
